@@ -9,6 +9,11 @@ import {apiUrl} from '../services/apiRest.js'
 import axios from "axios";
 
 class Login extends React.Component{
+    //usar props
+    constructor(props){
+        super(props);
+    }
+    //Info que se envia en axios, los nombres deben de ser iguales a los de la api
     state = {
         form:{
             "usuario"  : "",
@@ -35,7 +40,22 @@ class Login extends React.Component{
         let url = apiUrl + "auth";
         axios.post(url,this.state.form)
         .then(response =>{
-            console.log(response);
+            if(response.data.status ==="ok"){
+                localStorage.setItem("token",response.data.result.token);
+                // this.props.history.push("/dashboard"); 
+                window.location.href="./dashboard"
+            }else{
+                this.setState({
+                    error: true,
+                    errorMsg: response.data.result.error_msg
+                })
+            }
+        }).catch(error=>{
+            console.log(error);
+            this.setState({
+                error: true,
+                errorMsg: "Error: al conectar al servidor "
+            })
         })
     }
 
@@ -56,10 +76,13 @@ class Login extends React.Component{
       <input type="password" id="password" className="fadeIn third" name="password" placeholder="password" onChange={this.manejadorChange} />
       <input type="submit" className="fadeIn fourth" value="Log In" onClick={this.manejadorBoton} />
     </form>
-
+    {this.state.error === true &&
     <div id="formFooter">
-      <a className="underlineHover" href="#">Forgot Password?</a>
+        <div className="alert alert-danger" role="alert">
+            {this.state.errorMsg}
+        </div>
     </div>
+    }
 
   </div>
 </div>

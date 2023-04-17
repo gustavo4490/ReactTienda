@@ -1,12 +1,13 @@
 import React from "react";
+import Encabezado from "../templates/Encabezado";
 
 class Dashboard extends React.Component{
 
     render(){
         return(
-            <div>
-                Hola desde Dashboard
-            </div>
+            <React.Fragment>
+                <Encabezado></Encabezado>
+            </React.Fragment>
         );
     }
 
